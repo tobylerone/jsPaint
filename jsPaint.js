@@ -8,6 +8,7 @@ if(window.addEventListener) {
 
 		function init () {
 			//Get that canvas!
+			canvas=document.getElementById('imageView');
 			if(!canvas) {
 				alert('No canvas element found!');
 				return;
@@ -33,7 +34,7 @@ if(window.addEventListener) {
 
 		// This painting tool works like a drawing pencil which tracks the mouse 
 		// movements.
-		function tool_pencil () {
+		function tool_brush () {
 			var tool = this;
 			this.started = false;
 
@@ -51,6 +52,9 @@ if(window.addEventListener) {
 			this.mousemove = function (ev) {
 				if (tool.started) {
 					context.lineTo(ev._x, ev._y);
+					context.lineWidth=15;
+					context.lineCap='round';
+					context.lineJoin='round';
 					context.stroke();
 				}
 			};
