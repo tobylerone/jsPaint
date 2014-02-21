@@ -25,11 +25,16 @@ if(window.addEventListener) {
 
 			//Get that brush!
 			tool = new tool_brush();
+            
+            var cSS = new changeStrokeStyle('colorChooser', Array('red','orange','yellow','green','blue','indigo','violet'));
+            cSS.appendColorSelectors(20,20);
 
 			//add listeners
 			canvas.addEventListener('mousedown', ev_canvas, false);
 			canvas.addEventListener('mousemove', ev_canvas, false);
 			canvas.addEventListener('mouseup', ev_canvas, false);
+            //stopping the line when a user leaves the canvas
+            canvas.addEventListener('mouseleave', leaveCanvas, false);
 		}
 
 		// This painting tool works like a drawing pencil which tracks the mouse 
@@ -65,7 +70,7 @@ if(window.addEventListener) {
 					tool.mousemove(ev);
 					tool.started = false;
 				}
-			};
+			}
 		}
 
 		// The general-purpose event handler. This function just determines the mouse 
@@ -85,6 +90,30 @@ if(window.addEventListener) {
 				func(ev);
 			}
 		}
+        
+        function leaveCanvas(){
+            context.beginPath();
+        }
+        
+        function changeStrokeStyle(parentId, standardColors){
+           var parent = document.getElementById(parentId);
+           
+           this.appendColorSelectors = function(width, height){
+               for(var i = 0, length = standardColors.length; i<length; i++){
+                   var color = document.createElement('div');
+                   color.style.background = standardColors[i];
+                   color.style.width = width+'px';
+                   color.id = standardColors[i];
+                   color.style.height = height+'px';
+                   color.style.display = 'inline-block';
+                   parent.appendChild(color);
+                   
+                   color.addEventListener('mousedown',function(e){
+                       context.strokeStyle = e.target.id;
+                   });
+               }
+           }
+        }
 
 		init();
 
